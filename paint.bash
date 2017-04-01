@@ -16,6 +16,6 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-now="$( date +%s )"
+ls tmp/worklist_*.txt | tail -r | sed '1,1d' | xargs rm
 latestwl="$( ls tmp/worklist_*.txt | tail -n1 )"
 ./paint.py "$latestwl"
