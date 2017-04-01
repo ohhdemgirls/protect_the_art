@@ -8,6 +8,8 @@ participate. I have been able to run these scripts with my main account
 but I'd need several hundreds or even thousands of accounts in order
 to be able to draw the image that I would like :(
 
+![Spiral](https://raw.githubusercontent.com/eriknstr/mr_fourchan/master/res/mr_fourchan_16.png)
+
 ## User accounts
 
 Put user accounts and passwords in the file `created.txt`.
