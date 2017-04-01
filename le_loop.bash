@@ -20,7 +20,11 @@
 
 while true ; do
 
-  ./blockdiff.bash
+  false
+
+  while [ $? -ne 0 ] ; do
+    ./blockdiff.bash
+  done
 
   # For now we just take the greatest amount of seconds to wait
   now_sleep="$( ./paint.bash | jq .wait_seconds | sort | tail -n1 | cut -d'.' -f1 )"
