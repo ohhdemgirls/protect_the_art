@@ -74,7 +74,7 @@ def diffblock (c, r, blockid):
             if desired[k] != basis[k]:
 
                 blockwork.append((i, j, desired[k]))
-                wpix[i, j] = blockid
+                #wpix[i, j] = blockid
 
     return blockwork
 
