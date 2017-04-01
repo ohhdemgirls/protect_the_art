@@ -22,16 +22,16 @@ import os, sys, math
 
 from palette import palette
 
-if len(sys.argv) != 5:
+if len(sys.argv) != 4:
 
-    sys.stderr.write("Usage: {} <basis_in.bin> <desired_in.bin> <workviz_out.png> <worklist_out.txt>\n".format(sys.argv[0]))
+    sys.stderr.write("Usage: {} <basis_in.bin> <desired_in.bin> <worklist_out.txt>\n".format(sys.argv[0]))
     sys.exit(1)
 
 basis = []
 desired = []
 
-workviz = Image.new('RGB', (1000, 1000), "white")
-wpix = workviz.load()
+#workviz = Image.new('RGB', (1000, 1000), "white")
+#wpix = workviz.load()
 
 def blockid_next (blockid):
 
@@ -120,7 +120,7 @@ for r in range(math.ceil(1000 / 13)):
 
 sys.stderr.write("Number of pixels that need to be changed: {}\n".format(sum(map(len, worklist))))
 
-with open(sys.argv[4], 'w') as worklistf:
+with open(sys.argv[3], 'w') as worklistf:
 
     for block in worklist:
 
@@ -128,4 +128,4 @@ with open(sys.argv[4], 'w') as worklistf:
 
             worklistf.write("{} {} {}\n".format(x, y, color))
 
-workviz.save(sys.argv[3])
+#workviz.save(sys.argv[4])

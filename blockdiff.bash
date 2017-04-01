@@ -18,4 +18,4 @@
 
 now="$( date +%s )"
 latestbin="$( ls remote | tail -n1 )"
-./blockdiff.py "remote/$latestbin" "tmp/mr_fourchan_16.bin" tmp/workviz_$now.png tmp/worklist_$now.txt
+./blockdiff.py "remote/$latestbin" "tmp/mr_fourchan_16.bin" tmp/worklist_$now.txt
