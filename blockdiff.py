@@ -82,6 +82,8 @@ def readbin (binf):
 
     pix = []
 
+    binf.read(4) # skip first 4 bytes which aren't pixels
+
     for y in range(1000):
 
         for x in range(500):

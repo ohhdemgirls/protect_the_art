@@ -38,6 +38,11 @@ with Image.open(sys.argv[1]) as fin:
 
     with open(sys.argv[2], 'wb') as fout:
 
+        # Files start with 4 bytes which probably are something like
+        # a 32-bit timestamp or something. We put dummy zeros there.
+        zero = 0
+        fout.write(zero.to_bytes(4, byteorder='big'))
+
         for y in range(1000):
 
             for x in range(500):

@@ -33,6 +33,8 @@ pix = img.load()
 
 with open(sys.argv[1], 'rb') as fin:
 
+    fin.read(4) # skip first 4 bytes
+
     for y in range(1000):
 
         for x in range(500):
