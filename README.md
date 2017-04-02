@@ -1,16 +1,6 @@
-# Mr. Fourchan
+# Protect the Art
 
 Rewrite in progress!
-
-Scripts which were intended to coordinate participation
-in the April 1st special subreddit /r/place.
-
-These scripts work but it seems that new accounts are not allowed to
-participate. I have been able to run these scripts with my main account
-but I'd need several hundreds or even thousands of accounts in order
-to be able to draw the image that I would like :(
-
-![Spiral](https://raw.githubusercontent.com/eriknstr/mr_fourchan/master/res/mr_fourchan_16.png)
 
 ## Create directories for data
 
