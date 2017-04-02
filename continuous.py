@@ -229,6 +229,8 @@ while True:
 
     if account['can_use_after'] <= now():
 
+        account['can_use_after'] = now() + 300 # our default
+
         sys.stderr.write(':')
 
         for k in range(subset_width * subset_height):
