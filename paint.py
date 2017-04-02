@@ -38,7 +38,7 @@ with open('tmp/cookies.txt', 'r') as cookies:
             }
 
             r = requests.get('https://www.reddit.com/r/place.json', headers={'User-Agent': ua, 'Cookie': 'reddit_session=' + cookie})
-            sys.stderr.write('{}\n'.format(r.status_code))
+            sys.stderr.write('{} '.format(r.status_code))
             modhash = json.loads(r.text)['data']['modhash']
 
             #print(modhash)
