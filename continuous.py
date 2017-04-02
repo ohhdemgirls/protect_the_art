@@ -29,7 +29,7 @@ start_x = 0
 start_y = 0
 end_x = 999
 end_y = 999
-artworkf = None
+artworkfn = None
 
 prognam = sys.argv[0]
 
@@ -43,7 +43,7 @@ elif len(sys.argv) == 6:
     start_y = int(sys.argv[2])
     end_x = int(sys.argv[3])
     end_y = int(sys.argv[4])
-    artworkf = sys.argv[5]
+    artworkfn = sys.argv[5]
 
 else:
 
@@ -74,6 +74,11 @@ if (0 > start_y) or (start_y > end_y):
 
     sys.exit(1)
 
+subset_width = end_x + 1 - start_x
+subset_height = end_y + 1 - start_y
+
+scanband_nominal_height_px = min(subset_height, scanband_nominal_height_px)
+
 accounts = []
 
 now = lambda: int(time())
@@ -90,7 +95,7 @@ with open('tmp/cookies.txt', 'r') as cookiesf:
 
 def get_data_subset (data):
 
-    subset = [[None] * (end_x + 1 - start_x)] * (end_y + 1 - start_y)
+    subset = [[None] * subset_width] * subset_height
 
     j = 0
 
@@ -140,6 +145,37 @@ def get_canvas ():
 
 canvas = get_canvas()
 
+artwork_subset = None
+
+with open(artworkfn, 'rb') as artworkf:
+
+    artwork_subset = get_data_subset(decodebin(artworkf))
+
+def update_position_state (scanband):
+
+    scanband['pos'] += 1
+
+    if (scanband['pos'] == scanband['height']):
+
+        scanband['pos'] = 0
+        scanband['x'] += 1
+
+    if (scanband['x'] == subset_width):
+
+        scanband['x'] = 0
+        scanband['y'] += scanband_nominal_height_px
+
+    if (scanband['y'] >= subset_height):
+
+        scanband['y'] = 0
+        scanband['height'] = scanband_nominal_height_px
+
+    if (scanband['y'] + scanband['height'] > subset_height):
+
+        scanband['height'] = subset_height - scanband['y'] + 1
+
+scanband = { 'x': 0, 'y': 0, 'height': scanband_nominal_height_px, 'pos': 0 }
+
 while True:
 
     if canvas['expire'] <= now():
@@ -172,8 +208,11 @@ while True:
 
     if account['can_use_after'] <= now():
 
-        # TODO
+        sys.stderr.write('{} {}\n'.format(scanband['x'],
+            scanband['y'] + scanband['pos']))
 
-        pass
+        # TODO: Update position only if got 200
+
+        update_position_state(scanband)
 
     accounts.append(account)
