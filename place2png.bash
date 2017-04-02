@@ -20,7 +20,7 @@ set -eu
 
 tempfile="$( mktemp )"
 
-./place2png.py "$1" "$2"
+./decodebin.py "$1" "$2"
 pngtopnm "$2" | pnmquant 16 | pnmtopng > "$tempfile"
 file "$2"
 ls -al "$2"
