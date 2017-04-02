@@ -89,3 +89,9 @@ latestbin="$( ls remote/ | tail -n1 )"
 ```bash
 ./pngall.bash
 ```
+
+## Optional: Show second-most recent PNG
+
+```bash
+./show_recent.bash
+```
