@@ -12,9 +12,9 @@ mkdir -p tmp remote
 
 ## Prepare target bitmap data
 
-Use your own 1000x1000 PNG in place of `res/mr_fourchan_16.png` if you desire.
-Note that the palette of the PNG *must* match the /r/place pallette. See the
-file `palette.py` for a listing of the 16 palette colors.
+Use your own 1000x1000 PNG in place of `sample/mr_fourchan_16.png` if you
+desire.  Note that the palette of the PNG *must* match the /r/place pallette.
+See the file `palette.py` for a listing of the 16 palette colors.
 
 While the file needs to be 1000x1000 pixels, you don't need to fill all of
 it with artwork. If for example you are only interested in mantaining say
@@ -23,7 +23,7 @@ desired location and note the pixel positions of the upper left and the
 lower right hand corners of your artwork area.
 
 ```bash
-./png2place.py res/mr_fourchan_16.png tmp/mr_fourchan_16.bin
+./png2place.py sample/mr_fourchan_16.png tmp/mr_fourchan_16.bin
 ```
 
 Verify that transformations work as intended.
