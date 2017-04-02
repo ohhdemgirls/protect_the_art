@@ -89,7 +89,9 @@ with open('tmp/cookies.txt', 'r') as cookiesf:
 
         cookie = cookiel.strip()
 
-        account = { 'cookie': cookiel.strip(), 'can_use_after': now() }
+        s = requests.Session()
+
+        account = { 'cookie': cookiel.strip(), 'can_use_after': now(), 's': s }
 
         accounts.append(account)
 
@@ -251,7 +253,7 @@ while True:
 
         try:
 
-            r = requests.get('https://www.reddit.com/r/place.json', headers={'User-Agent': ua, 'Cookie': 'reddit_session=' + cookie})
+            r = account['s'].get('https://www.reddit.com/r/place.json', headers={'User-Agent': ua, 'Cookie': 'reddit_session=' + account['cookie']})
             sleep(2)
 
             sys.stderr.write(' ' + str(r.status_code))
@@ -263,16 +265,10 @@ while True:
             sys.stderr.write(' ' + str(paint))
             sys.stderr.flush()
 
-            r = requests.post('https://www.reddit.com/api/place/draw.json', data=paint, headers={'User-Agent': ua, 'Cookie': 'reddit_session=' + cookie, 'X-Modhash': modhash})
+            r = account['s'].post('https://www.reddit.com/api/place/draw.json', data=paint, headers={'User-Agent': ua, 'Cookie': 'reddit_session=' + account['cookie'], 'X-Modhash': modhash})
             sleep(2)
 
             sys.stderr.write(' ' + str(r.status_code))
-
-            wait = int(json.loads(r.text)['wait_seconds']) + 1
-
-            sys.stderr.write(',' + str(wait))
-
-            account['can_use_after'] = wait + now()
 
             if r.status_code == 200:
 
@@ -282,6 +278,12 @@ while True:
 
                 sys.stderr.write(' ' + r.text)
 
+            sys.stderr.flush()
+
+            wait = int(json.loads(r.text)['wait_seconds']) + 1
+            account['can_use_after'] = wait + now()
+
+            sys.stderr.write(',' + str(wait))
             sys.stderr.flush()
 
         except KeyboardInterrupt:
