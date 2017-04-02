@@ -24,28 +24,34 @@ with open('created.txt', 'r') as usrpass:
 
         for uline in usrpass:
 
-            usr, pwd = [v for v in uline.strip().split('\t') if v]
+            try:
 
-            status = 0
-            attempts = 0
+                usr, pwd = [v for v in uline.strip().split('\t') if v]
 
-            while status != 200 and attempts < 30:
+                status = 0
+                attempts = 0
 
-                attempts += 1
+                while status != 200 and attempts < 30:
 
-                r = requests.post('https://www.reddit.com/api/login', data={ 'user': usr, 'passwd': pwd, 'api_type': 'json' })
-                status = r.status_code
+                    attempts += 1
 
-                sys.stderr.write('.')
-                sys.stderr.flush()
+                    r = requests.post('https://www.reddit.com/api/login', data={ 'user': usr, 'passwd': pwd, 'api_type': 'json' })
+                    status = r.status_code
 
-                time.sleep(2)
+                    sys.stderr.write('.')
+                    sys.stderr.flush()
 
-            sys.stderr.write('{}\n'.format(status))
+                    time.sleep(2)
 
-            if status == 200:
+                sys.stderr.write('{}\n'.format(status))
 
-                cookie = json.loads(r.text)['json']['data']['cookie']
-                #print(cookie)
+                if status == 200:
 
-                cookies.write('{}\n'.format(cookie))
+                    cookie = json.loads(r.text)['json']['data']['cookie']
+                    #print(cookie)
+
+                    cookies.write('{}\n'.format(cookie))
+
+            except:
+
+                pass
