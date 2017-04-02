@@ -1,5 +1,7 @@
 # Protect the Art
 
+Scripts for coordinated participation in April 1st special subreddit /r/place
+
 Rewrite in progress!
 
 ## Create directories for data
