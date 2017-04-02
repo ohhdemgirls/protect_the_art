@@ -216,7 +216,7 @@ while True:
             sys.stderr.write('Reusing cached canvas {}.\n'
                 .format(canvas['file']))
 
-            canvas['expire'] = expire
+            canvas['expire'] = canvas['expire'] + default_expiration_secs
 
         else:
 
@@ -229,7 +229,7 @@ while True:
 
     if account['can_use_after'] <= now():
 
-        account['can_use_after'] = now() + 300 # our default
+        account['can_use_after'] = now() + default_expiration_secs
 
         sys.stderr.write(':')
 
