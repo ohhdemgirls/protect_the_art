@@ -17,7 +17,7 @@
 #
 
 from time import time, sleep
-import os, sys, requests, mmap, shutil
+import os, sys, requests, mmap, shutil, json
 
 from config import *
 
@@ -35,7 +35,7 @@ prognam = sys.argv[0]
 
 if len(sys.argv) == 2:
 
-    artworkf = sys.argv[1]
+    artworkfn = sys.argv[1]
 
 elif len(sys.argv) == 6:
 
@@ -95,7 +95,7 @@ with open('tmp/cookies.txt', 'r') as cookiesf:
 
 def get_data_subset (data):
 
-    subset = [[None] * subset_width] * subset_height
+    subset = [[None for i in range(subset_width)] for j in range(subset_height)]
 
     j = 0
 
@@ -105,7 +105,7 @@ def get_data_subset (data):
 
         for x in range(start_x, end_x + 1):
 
-            subset[j][i] = data[y * 1000 + x]
+            subset[j][i] = data[y * 1000 + x] #[2]
 
             i += 1
 
@@ -128,16 +128,28 @@ def get_canvas ():
 
     if r.status_code == 200:
 
-        with open(new_canvas['file'] + '.part', 'ab+') as dlf:
+        partfn = new_canvas['file'] + '.part'
 
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, dlf)
+        try:
 
-            dlf.seek(0)
+            with open(partfn, 'ab+') as dlf:
 
-            new_canvas['subset'] = get_data_subset(decodebin(dlf))
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, dlf)
 
-        os.rename(new_canvas['file'] + '.part', new_canvas['file'])
+                dlf.seek(0)
+
+                new_canvas['subset'] = get_data_subset(decodebin(dlf))
+
+        except:
+
+            if os.path.isfile(partfn):
+
+                os.remove(partfn)
+
+            raise
+
+        os.rename(partfn, new_canvas['file'])
 
         return new_canvas
 
@@ -150,6 +162,26 @@ artwork_subset = None
 with open(artworkfn, 'rb') as artworkf:
 
     artwork_subset = get_data_subset(decodebin(artworkf))
+
+for fname, subset in (('ascii_aw', artwork_subset), ('ascii_can', canvas['subset'])):
+
+    with open(os.path.join('tmp', fname), 'w') as f:
+
+        j = 0
+
+        for y in range(start_y, end_y + 1):
+
+            i = 0
+
+            for x in range(start_x, end_x + 1):
+
+                f.write('{:2} '.format(subset[j][i]))
+
+                i += 1
+
+            f.write('\n')
+
+            j += 1
 
 def update_position_state (scanband):
 
@@ -180,13 +212,18 @@ while True:
 
     if canvas['expire'] <= now():
 
-        sys.stderr.write("canvas['expire']: {}\n".format(canvas['expire']))
+        sys.stderr.write('/')
+        sys.stderr.flush()
 
         new_canvas = None
 
         try:
 
             new_canvas = get_canvas()
+
+        except KeyboardInterrupt:
+
+            raise
 
         except:
 
@@ -203,16 +240,80 @@ while True:
 
             canvas = new_canvas
 
+        sleep(2)
+
     account = accounts[0]
     accounts = accounts[1:]
 
     if account['can_use_after'] <= now():
 
-        sys.stderr.write('{} {}\n'.format(scanband['x'],
-            scanband['y'] + scanband['pos']))
+        sys.stderr.write(':')
 
-        # TODO: Update position only if got 200
+        for k in range(subset_width * subset_height):
 
-        update_position_state(scanband)
+            x, y = scanband['x'], scanband['y'] + scanband['pos']
+
+            if (canvas['subset'][y][x] == artwork_subset[y][x]):
+
+                sys.stderr.write('-')
+                sys.stderr.flush()
+
+                update_position_state(scanband)
+
+            else:
+
+                sys.stderr.write('({}, {})'.format(x, y))
+                sys.stderr.flush()
+
+                break
+
+        x, y = scanband['x'], scanband['y'] + scanband['pos']
+
+        try:
+
+            r = requests.get('https://www.reddit.com/r/place.json', headers={'User-Agent': ua, 'Cookie': 'reddit_session=' + cookie})
+            sleep(2)
+
+            sys.stderr.write(' ' + str(r.status_code))
+
+            modhash = json.loads(r.text)['data']['modhash']
+
+            paint = { 'x': x + start_x , 'y': y + start_y , 'color': artwork_subset[y][x] }
+
+            sys.stderr.write(' ' + str(paint))
+            sys.stderr.flush()
+
+            r = requests.post('https://www.reddit.com/api/place/draw.json', data=paint, headers={'User-Agent': ua, 'Cookie': 'reddit_session=' + cookie, 'X-Modhash': modhash})
+            sleep(2)
+
+            sys.stderr.write(' ' + str(r.status_code))
+
+            wait = int(json.loads(r.text)['wait_seconds']) + 1
+
+            sys.stderr.write(',' + str(wait))
+
+            account['can_use_after'] = wait + now()
+
+            if r.status_code == 200:
+
+                update_position_state(scanband)
+
+            else:
+
+                sys.stderr.write(' ' + r.text)
+
+            sys.stderr.flush()
+
+        except KeyboardInterrupt:
+
+            raise
+
+        except:
+
+            sys.stderr.write('\n' + str(sys.exc_info()[1]) + '\n')
+
+        sleep(2)
 
     accounts.append(account)
+
+    sys.stderr.flush()

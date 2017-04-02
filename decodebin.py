@@ -33,7 +33,9 @@ def decodebin (binf):
             pix1 = byte >> 4
             pix2 = byte & 15
 
+            #pix.append((x, y, pix1))
             pix.append(pix1)
+            #pix.append((x, y, pix2))
             pix.append(pix2)
 
     return pix
