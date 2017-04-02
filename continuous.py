@@ -163,26 +163,6 @@ with open(artworkfn, 'rb') as artworkf:
 
     artwork_subset = get_data_subset(decodebin(artworkf))
 
-for fname, subset in (('ascii_aw', artwork_subset), ('ascii_can', canvas['subset'])):
-
-    with open(os.path.join('tmp', fname), 'w') as f:
-
-        j = 0
-
-        for y in range(start_y, end_y + 1):
-
-            i = 0
-
-            for x in range(start_x, end_x + 1):
-
-                f.write('{:2} '.format(subset[j][i]))
-
-                i += 1
-
-            f.write('\n')
-
-            j += 1
-
 def update_position_state (scanband):
 
     scanband['pos'] += 1
