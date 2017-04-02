@@ -28,6 +28,7 @@ while true ; do
 
   # For now we just take the greatest amount of seconds to wait
   now_sleep="$( ./paint.bash | jq .wait_seconds | sort | tail -n1 | cut -d'.' -f1 )"
+  echo "Now sleep $now_sleep seconds" 1>&2
 
   if ! [[ $now_sleep =~ ^[0-9]+$ ]] ; then
     echo default sleep 1>&2
