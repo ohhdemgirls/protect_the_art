@@ -77,7 +77,7 @@ print(framestats(frames))
 
 print('\n---\n')
 
-print('Grouped such that each group has 99 seconds between captures at most.\n')
+print('Grouped such that each group has at most 99 seconds between captures.\n')
 
 for i, group in enumerate(groups):
 
