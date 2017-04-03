@@ -71,24 +71,26 @@ def framestats (fg):
             max(tbf), '' if max(tbf) == 1 else 's',
             numpy.mean(tbf), numpy.std(tbf))
 
-print('Statistics about the captured frames.\n\nTotal\n')
+if __name__ == '__main__':
 
-print(framestats(frames))
+    print('Statistics about the captured frames.\n\nTotal\n')
 
-print('\n---\n')
+    print(framestats(frames))
 
-print('Grouped such that each group has at most 99 seconds between captures.\n')
+    print('\n---\n')
 
-for i, group in enumerate(groups):
+    print('Grouped with at most 99 seconds between captures.\n')
 
-    if len(group) > 1:
+    for i, group in enumerate(groups):
 
-        print('Group #{}\n'.format(i + 1))
-        print(framestats(group))
+        if len(group) > 1:
 
-    else:
+            print('Group #{}\n'.format(i + 1))
+            print(framestats(group))
 
-        print('Single frame at {} ({})'
-            .format(ut_to_human(group[0]), group[0]))
+        else:
 
-    print()
+            print('Single frame at {} ({})'
+                .format(ut_to_human(group[0]), group[0]))
+
+        print()
