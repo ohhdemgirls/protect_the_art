@@ -7,7 +7,7 @@ Rewrite in progress!
 ## Create directories for data
 
 ```bash
-mkdir -p tmp remote
+mkdir -p tmp/png remote
 ```
 
 ## Prepare target bitmap data
@@ -81,7 +81,7 @@ In case you want to look at it. Useful for verification as well.
 
 ```bash
 latestbin="$( ls remote/ | tail -n1 )"
-./place2png.bash "remote/$latestbin" "tmp/${latestbin%.bin}.png"
+./place2png.bash "remote/$latestbin" "tmp/png/${latestbin%.bin}.png"
 ```
 
 ## Optional: Convert all downloaded bitmaps to PNG

@@ -19,7 +19,7 @@
 import os, numpy
 from datetime import datetime
 
-os.chdir('tmp/')
+os.chdir('tmp/png/')
 
 frames = [ int(f[:-4]) for f in os.listdir()
     if f.endswith('.png') and f[0] == '1' ]

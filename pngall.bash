@@ -18,7 +18,7 @@
 
 for file in remote/*.bin ; do
   binfile="$file"
-  pngfile="tmp/$( basename "${file%.bin}.png" )"
+  pngfile="tmp/png/$( basename "${file%.bin}.png" )"
   if [ ! -f "$pngfile" ] ; then
     ./place2png.bash "$binfile" "$pngfile"
   fi

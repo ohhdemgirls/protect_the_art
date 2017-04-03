@@ -18,13 +18,13 @@
 
 set -eu
 
-latestpng="$( ls tmp/*.png | grep '^tmp/[0-9]\+\.png' | tail -n2 | head -n1 )"
+latestpng="$( ls tmp/png/*.png | tail -n2 | head -n1 )"
 feh -x $latestpng &
 prev_pid=$!
 
 while true ; do
   prevpng=$latestpng
-  latestpng="$( ls tmp/*.png | grep '^tmp/[0-9]\+\.png' | tail -n2 | head -n1 )"
+  latestpng="$( ls tmp/png/*.png | tail -n2 | head -n1 )"
   if [ "$prevpng" != "$latestpng" ] ; then
     feh -x $latestpng &
     sleep 1
