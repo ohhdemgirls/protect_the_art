@@ -2,6 +2,8 @@
 
 Scripts for coordinated participation in April 1st special subreddit /r/place
 
+[After 72 hours, place has ended](https://www.reddit.com/r/place/comments/6382bb/place_has_ended/). This repository will remain but it's usefulnes is now a bit more limited than it was while place was ongoing.
+
 ## Create directories for data
 
 ```bash
