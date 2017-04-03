@@ -28,27 +28,31 @@ frames.sort()
 
 time_between_frames = lambda fg: [ p[1] - p[0] for p in zip(fg[:-1], fg[1:]) ]
 
-groups = []
-curr_group = []
+def group_clusters (max_time_between_frames, frames):
 
-for time_to_next, frame in zip(time_between_frames(frames), frames[:-1]):
+    groups = []
+    curr_group = []
 
-    curr_group.append(frame)
+    for time_to_next, frame in zip(time_between_frames(frames), frames[:-1]):
+
+        curr_group.append(frame)
+
+        if time_to_next > 99:
+
+            groups.append(curr_group)
+            curr_group = []
+
+    groups.append(curr_group)
 
     if time_to_next > 99:
 
-        groups.append(curr_group)
-        curr_group = []
+        groups.append([frames[-1]])
 
-groups.append(curr_group)
+    else:
 
-if time_to_next > 99:
+        groups[-1].append(frames[-1])
 
-    groups.append([frames[-1]])
-
-else:
-
-    groups[-1].append(frames[-1])
+    return groups
 
 def ut_to_human (ut):
 
@@ -79,7 +83,11 @@ if __name__ == '__main__':
 
     print('\n---\n')
 
-    print('Grouped with at most 99 seconds between captures.\n')
+    max_time_between_frames=99
+    print('Grouped with at most {} seconds between captures.\n'
+        .format(max_time_between_frames))
+
+    groups = group_clusters(max_time_between_frames, frames)
 
     for i, group in enumerate(groups):
 
