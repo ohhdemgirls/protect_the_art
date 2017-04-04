@@ -95,3 +95,7 @@ latestbin="$( ls remote/ | tail -n1 )"
 ```bash
 ./show_recent.bash
 ```
+
+## Optional: Statistics and animation
+
+See the files `statistics.py`, `resampled_animation.py` and `video.bash`.
